@@ -517,6 +517,10 @@ class LasBasler(PCDSAreaDetectorTyphosBeamStats, BaslerBase):
                        doc='Load current settings into selected User Set')
     set_metadata(load_setting, dict(variety='command-proc', value=1))
 
+    # Add binning signals for IMAGE1:ROI as this is the stream used in viewer
+    roi_bin_x = Cpt(EpicsSignalWithRBV, 'IMAGE1:ROI:BinX', kind='config')
+    roi_bin_y = Cpt(EpicsSignalWithRBV, 'IMAGE1:ROI:BinY', kind='config')
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Add some long_names
@@ -534,8 +538,10 @@ class LasBasler(PCDSAreaDetectorTyphosBeamStats, BaslerBase):
         self.image_mode.long_name = 'Image Mode'
         self.trigger_mode.long_name = 'Trigger Mode'
         self.acquisition_period.long_name = 'Acquisition Period'
-        self.bin_x.long_name = 'Software Bin X'
-        self.bin_y.long_name = 'Software Bin Y'
+        self.bin_x.long_name = 'Bin X'
+        self.bin_y.long_name = 'Bin Y'
+        self.roi_bin_x.long_name = 'ROI: BinX'
+        self.roi_bin_y.long_name = 'ROI: BinY'
         self.region_start_x.long_name = 'Region Start (X)'
         self.region_size_x.long_name = 'Region Size (X)'
         self.region_start_y.long_name = 'Region Start (Y)'
