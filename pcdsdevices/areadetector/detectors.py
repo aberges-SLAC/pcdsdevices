@@ -399,7 +399,7 @@ class PCDSAreaDetectorTyphos(Device):
                    '--instrument',
                    '{}.format(get_hutch_name())',
                    '--oneline',
-                   'GE:16,{0}:IMAGE1;{0},,{0}'.format(self.prefix[0:-1])]
+                   'GE:16,{0}:IMAGE2;{0},,{0}'.format(self.prefix[0:-1])]
 
         self.log.info('Opening python viewer for camera...')
         subprocess.run(arglist, stdout=subprocess.DEVNULL,
@@ -520,6 +520,14 @@ class LasBasler(PCDSAreaDetectorTyphosBeamStats, BaslerBase):
     # Add binning signals for IMAGE1:ROI as this is the stream used in viewer
     roi_bin_x = Cpt(EpicsSignalWithRBV, 'IMAGE1:ROI:BinX', kind='config')
     roi_bin_y = Cpt(EpicsSignalWithRBV, 'IMAGE1:ROI:BinY', kind='config')
+
+    # Plugin management
+    overlay = Cpt(OverlayPlugin, 'Over1:', kind='omitted')
+    # image2 = Cpt(ImagePlugin, 'IMAGE2:', kind='omitted')
+    overlay_use = Cpt(EpicsSignalWithRBV, 'Over1:1:Use', kind='config')
+    set_metadata(overlay_use, dict(variety='enum'))
+    overlay_shape = Cpt(EpicsSignalWithRBV, 'Over1:1:Shape', kind='config')
+    set_metadata(overlay_shape, dict(variety='enum'))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
