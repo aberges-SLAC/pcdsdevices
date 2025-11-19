@@ -12,7 +12,8 @@ from pydm.widgets import (PyDMByteIndicator, PyDMEnumComboBox, PyDMLabel,
                           PyDMLineEdit, PyDMPushButton)
 from pydm.widgets.waveformplot import PyDMWaveformPlot, WaveformCurveItem
 from qtpy.QtCore import QTimer
-from qtpy.QtWidgets import QColorDialog, QFileDialog, QPushButton, QWidget
+from qtpy.QtWidgets import (QCheckBox, QColorDialog, QFileDialog, QPushButton,
+                            QWidget)
 
 
 class _QminiBaseUI(QWidget):
@@ -22,7 +23,8 @@ class _QminiBaseUI(QWidget):
     recolor_graph_button: QPushButton
     recolor_fit_button: QPushButton
     save_spectra_button: PyDMPushButton
-    toggle_fit_button: QPushButton
+    toggle_fit_box: QCheckBox
+    toggle_autorange_box: QCheckBox
 
 
 class QminiBase:
@@ -46,8 +48,11 @@ class QminiBase:
 
         # Some properties to help us mess with the fitted curve later
         self._fit_color = 'red'
-        self.ui.toggle_fit_button.clicked.connect(self.toggle_fit)
-        self._fit_toggle = 1
+        self.default_autorange_y = True
+        # Dumb and hacky but the QCheckBoxes have rogue parents for some reason???
+        self.toggle_fit_box = self.findChild(QCheckBox, 'toggle_fit_box')
+        if self.toggle_fit_box:
+            self.toggle_fit_box.stateChanged.connect(self._toggle_fit)
 
     def add_device(self, device):
         """Typhos hook for adding a new device."""
@@ -127,6 +132,7 @@ class QminiBase:
                 self._plot_timer = QTimer(parent=self)
                 self._plot_timer.timeout.connect(self.fix_plot_domain)
                 self._plot_timer.setInterval(200)
+
                 self._plot_timer.start()
 
             # standard channel macro expansion
@@ -169,7 +175,7 @@ class QminiBase:
         x_min = int(self.device.wavelengths.get().min())
         x_max = int(self.device.wavelengths.get().max())
 
-        if not x_max > x_min:
+        if not (x_max > x_min):
             # Restart the timer if these signals are still None
             self._plot_timer.start()
 
@@ -191,8 +197,12 @@ class QminiBase:
 
         else:
             try:
-                plot.setMinYRange(y_min)
-                plot.setMaxYRange(1.1*y_max)
+                if self.ui.toggle_autorange_box.isChecked():
+                    plot.setMinYRange(y_min)
+                    plot.setMaxYRange(1.1*y_max)
+                else:
+                    # Just don't update it then
+                    return
             except RuntimeError:
                 # We must've deleted the plot without unsubscribing, do it!
                 self.device.spectrum.unsubscribe(self._autorange_cid)
@@ -287,22 +297,13 @@ class QminiBase:
                                             units='a.u.',
                                             color=_new_color)
 
-    def toggle_fit(self):
+    def _toggle_fit(self, state: int):
         """
         Toggle the display of the fitted curve to the plot.
         """
         plot = self.ui.plot
 
-        if self._fit_toggle > 0:
-            self.ui.toggle_fit_button.setText('show')
-            temp = 0
-        else:
-            self.ui.toggle_fit_button.setText('hide')
-            temp = 1
-
         for curve in plot._curves:
             if curve.y_axis_name == 'Fit':
-                curve.lineStyle = temp
-                curve.lineWidth = 2*temp
-
-        self._fit_toggle = temp
+                curve.lineStyle = state
+                curve.lineWidth = state
