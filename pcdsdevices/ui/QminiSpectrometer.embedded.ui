@@ -189,7 +189,7 @@
      </property>
      <property name="yAxes">
       <stringlist>
-       <string>{&quot;name&quot;: &quot;Intensity&quot;, &quot;orientation&quot;: &quot;left&quot;, &quot;label&quot;: null, &quot;minRange&quot;: -2.998703319182264, &quot;maxRange&quot;: 2.998703319182264, &quot;autoRange&quot;: true, &quot;logMode&quot;: false}</string>
+       <string>{&quot;name&quot;: &quot;Intensity&quot;, &quot;orientation&quot;: &quot;left&quot;, &quot;label&quot;: null, &quot;minRange&quot;: -3.1186514519495545, &quot;maxRange&quot;: 3.1186514519495545, &quot;autoRange&quot;: true, &quot;logMode&quot;: false}</string>
       </stringlist>
      </property>
      <property name="xLabels">
@@ -261,20 +261,47 @@
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
        <layout class="QGridLayout" name="graph_tools_grid">
-        <item row="1" column="3" alignment="Qt::AlignLeft">
-         <widget class="QPushButton" name="toggle_fit_button">
+        <item row="1" column="2">
+         <widget class="QPushButton" name="recolor_fit_button">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="minimumSize">
            <size>
-            <width>30</width>
-            <height>0</height>
+            <width>25</width>
+            <height>25</height>
            </size>
           </property>
           <property name="text">
-           <string>hide</string>
+           <string/>
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item row="1" column="0">
+         <widget class="QLabel" name="fit_recolor_label">
+          <property name="text">
+           <string>Fit</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="5" alignment="Qt::AlignLeft">
+         <widget class="QPushButton" name="qmini_settings_button">
+          <property name="text">
+           <string>Parameters</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="recolor_graph_label">
+          <property name="text">
+           <string>Spectrum</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
          <widget class="QPushButton" name="recolor_graph_button">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -293,34 +320,14 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="4">
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="recolor_graph_label">
-          <property name="text">
-           <string>Spectrum</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2" alignment="Qt::AlignLeft">
+        <item row="1" column="3" alignment="Qt::AlignLeft">
          <widget class="QPushButton" name="fit_settings_button">
           <property name="text">
            <string>Fit Settings</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="2" alignment="Qt::AlignLeft">
+        <item row="0" column="3" alignment="Qt::AlignLeft">
          <widget class="PyDMPushButton" name="force_trigger_button">
           <property name="sizePolicy">
            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -381,33 +388,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="fit_recolor_label">
-          <property name="text">
-           <string>Fit</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QPushButton" name="recolor_fit_button">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>25</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3" alignment="Qt::AlignLeft">
+        <item row="0" column="4" alignment="Qt::AlignLeft">
          <widget class="PyDMPushButton" name="save_spectra_button">
           <property name="sizePolicy">
            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -475,10 +456,17 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="4" alignment="Qt::AlignLeft">
-         <widget class="QPushButton" name="qmini_settings_button">
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="toggle_autorange_box">
           <property name="text">
-           <string>Parameters</string>
+           <string>Autorange</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QCheckBox" name="toggle_fit_box">
+          <property name="text">
+           <string>Show</string>
           </property>
          </widget>
         </item>
